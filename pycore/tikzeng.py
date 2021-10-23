@@ -21,6 +21,10 @@ def to_cor():
 \def\FcReluColor{rgb:blue,5;red,5;white,4}
 \def\SoftmaxColor{rgb:magenta,5;black,7}   
 \def\SumColor{rgb:blue,5;green,15}
+\def\Relu{rgb:cyan,5;green,15}
+\def\Picture{rgb:blue,5;green,15}
+\def\BatchNorm{rgb:pink,5;green,15}
+\def\DropoutColor{rgb:magenta,5;black,7}  
 """
 
 def to_begin():
@@ -49,6 +53,106 @@ def to_Conv( name, s_filer=256, n_filer=64, offset="(0,0,0)", to="(0,0,0)", widt
         caption="""+ caption +r""",
         xlabel={{"""+ str(n_filer) +""", }},
         zlabel="""+ str(s_filer) +""",
+        fill=\ConvColor,
+        height="""+ str(height) +""",
+        width="""+ str(width) +""",
+        depth="""+ str(depth) +"""
+        }
+    };
+"""
+
+def to_picture( name, s_filer=256, n_filer=64, offset="(0,0,0)", to="(0,0,0)", width=3, height=40, depth=40, caption=" " ):
+    return r"""
+\pic[shift={"""+ offset +"""}] at """+ to +""" 
+    {Box={
+        name=""" + name +""",
+        caption="""+ caption +r""",
+        xlabel={{"""+ str(n_filer) +""", }},
+        zlabel="""+ str(s_filer) +""",
+        fill=\Picture,
+        height="""+ str(height) +""",
+        width="""+ str(width) +""",
+        depth="""+ str(depth) +"""
+        }
+    };
+"""
+
+def to_Linear( name, s_filer=256, offset="(0,0,0)", to="(0,0,0)", height=40, depth_width=3, caption=" " ):
+    return r"""
+\pic[shift={"""+ offset +"""}] at """+ to +""" 
+    {Box={
+        name=""" + name +""",
+        caption="""+ caption +r""",
+        zlabel="""+ str(s_filer) +""",
+        fill=\ConvColor,
+        height="""+ str(height) +""",
+        width="""+ str(depth_width) +""",
+        depth="""+ str(depth_width) +"""
+        }
+    };
+"""
+
+def to_ReLu( name, s_filer=256, n_filer=64, offset="(0,0,0)", to="(0,0,0)", width=3, height=40, depth=40, caption=" " ):
+    return r"""
+\pic[shift={"""+ offset +"""}] at """+ to +""" 
+    {Box={
+        name=""" + name +""",
+        caption="""+ caption +r""",
+        fill=\Relu,
+        height="""+ str(height) +""",
+        width="""+ str(width) +""",
+        depth="""+ str(depth) +"""
+        }
+    };
+"""
+def to_BatchNorm2d( name, offset="(0,0,0)", to="(0,0,0)", width=3, height=40, depth=40, caption="BatchNorm2d" ):
+    return r"""
+\pic[shift={"""+ offset +"""}] at """+ to +""" 
+    {Box={
+        name=""" + name +r""",
+        caption=\\""" + caption +r""",
+        fill=\BatchNorm,
+        height="""+ str(height) +""",
+        width="""+ str(width) +""",
+        depth="""+ str(depth) +"""
+        }
+    };
+"""
+
+def to_BatchNorm1d( name, offset="(0,0,0)", to="(0,0,0)", height=40, depth_width=3, caption="BatchNorm1d" ):
+    return r"""
+\pic[shift={"""+ offset +"""}] at """+ to +""" 
+    {Box={
+        name=""" + name +r""",
+        caption=\\""" + caption +r""",
+        fill=\BatchNorm,
+        height="""+ str(height) +""",
+        width="""+ str(depth_width) +""",
+        depth="""+ str(depth_width) +"""
+        }
+    };
+"""
+
+def to_Dropout( name, offset="(0,0,0)", to="(0,0,0)", height=40, depth_width=3, caption="Dropout" ):
+    return r"""
+\pic[shift={"""+ offset +"""}] at """+ to +""" 
+    {Box={
+        name=""" + name +r""",
+        caption=\\""" + caption +r""",
+        fill=\DropoutColor,
+        height="""+ str(height) +""",
+        width="""+ str(depth_width) +""",
+        depth="""+ str(depth_width) +"""
+        }
+    };
+"""
+
+def to_BatchNorm2d( name, offset="(0,0,0)", to="(0,0,0)", width=3, height=40, depth=40, caption="BatchNorm2d" ):
+    return r"""
+\pic[shift={"""+ offset +"""}] at """+ to +""" 
+    {Box={
+        name=""" + name +""",
+        caption="""+ caption +r""",
         fill=\ConvColor,
         height="""+ str(height) +""",
         width="""+ str(width) +""",
