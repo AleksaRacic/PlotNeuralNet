@@ -1,6 +1,5 @@
 
 \documentclass[border=8pt, multi, tikz]{standalone} 
-\usepackage{silence}
 \usepackage{import}
 \subimport{../layers/}{init}
 \usetikzlibrary{positioning}
@@ -26,12 +25,14 @@
 \tikzstyle{connection}=[ultra thick,every node/.style={sloped,allow upside down},draw=\edgecolor,opacity=0.7]
 \tikzstyle{copyconnection}=[ultra thick,every node/.style={sloped,allow upside down},draw={rgb:blue,4;red,1;green,1;black,3},opacity=0.7]
 
+\node[canvas is zy plane at x=0] (input) at slika-east {\includegraphics[width=37cm,height=37cm]{nesto.png}};
+
 \pic[shift={(0,0,0)}] at (conv1-east) 
     {Box={
         name=slika,
         caption=Slika,
         xlabel={{1, }},
-        zlabel=28,
+        zlabel=224,
         fill=\Picture,
         height=37,
         width=3,
@@ -42,12 +43,12 @@
 \pic[shift={(2,0,0)}] at (slika-east) 
     {Box={
         name=conv1,
-        caption=Conv (3x3),
-        xlabel={{32, }},
-        zlabel=28,
+        caption=Conv (5x5),
+        xlabel={{16, }},
+        zlabel=224,
         fill=\ConvColor,
         height=37,
-        width=32,
+        width=16,
         depth=37
         }
     };
@@ -79,7 +80,7 @@
 \pic[shift={ (1,0,0) }] at (relu1-east) 
     {Box={
         name=pool1,
-        caption=Pool(2,2),
+        caption=Pool(2x2),
         fill=\PoolColor,
         opacity=0.5,
         height=18,
@@ -93,12 +94,12 @@
 \pic[shift={(2,0,0)}] at (pool1-east) 
     {Box={
         name=conv2,
-        caption=Conv (3x3),
-        xlabel={{64, }},
+        caption=Conv (5x5),
+        xlabel={{32, }},
         zlabel=110,
         fill=\ConvColor,
         height=18,
-        width=64,
+        width=32,
         depth=18
         }
     };
@@ -130,7 +131,7 @@
 \pic[shift={ (1,0,0) }] at (relu2-east) 
     {Box={
         name=pool2,
-        caption=Pool(2,2),
+        caption=Pool(2x2),
         fill=\PoolColor,
         opacity=0.5,
         height=8,
@@ -145,7 +146,7 @@
     {Box={
         name=linear1,
         caption=Flatten,
-        zlabel=2304,
+        zlabel=89888,
         fill=\ConvColor,
         height=37,
         width=3,
@@ -159,7 +160,7 @@
     {Box={
         name=linear2,
         caption=Linear,
-        zlabel=600,
+        zlabel=120,
         fill=\ConvColor,
         height=10,
         width=3,
@@ -171,20 +172,31 @@
 
 \pic[shift={(0,0,0)}] at (linear2-east) 
     {Box={
-        name=Dropout,
-        caption=\\Droput(0.25),
-        fill=\DropoutColor,
+        name=norm3,
+        caption=\\BatchNorm1d,
+        fill=\BatchNorm,
         height=10,
         width=3,
         depth=3
         }
     };
 
-\pic[shift={(2,0,0)}] at (Dropout-east) 
+\pic[shift={(0,0,0)}] at (norm3-east) 
+    {Box={
+        name=relu4,
+        caption=Relu,
+        fill=\Relu,
+        height=10,
+        width=3,
+        depth=3
+        }
+    };
+
+\pic[shift={(2,0,0)}] at (relu4-east) 
     {Box={
         name=linear3,
         caption=Linear,
-        zlabel=120,
+        zlabel=84,
         fill=\ConvColor,
         height=8,
         width=3,
@@ -192,9 +204,31 @@
         }
     };
 
-\draw [connection]  (Dropout-east)    -- node {\midarrow} (linear3-west);
+\draw [connection]  (relu4-east)    -- node {\midarrow} (linear3-west);
 
-\pic[shift={(2,0,0)}] at (linear3-east) 
+\pic[shift={(0,0,0)}] at (linear3-east) 
+    {Box={
+        name=norm4,
+        caption=\\BatchNorm1d,
+        fill=\BatchNorm,
+        height=8,
+        width=3,
+        depth=3
+        }
+    };
+
+\pic[shift={(0,0,0)}] at (norm4-east) 
+    {Box={
+        name=relu5,
+        caption=Relu,
+        fill=\Relu,
+        height=8,
+        width=3,
+        depth=3
+        }
+    };
+
+\pic[shift={(2,0,0)}] at (relu5-east) 
     {Box={
         name=linear4,
         caption=Linear,
@@ -206,7 +240,7 @@
         }
     };
 
-\draw [connection]  (linear3-east)    -- node {\midarrow} (linear4-west);
+\draw [connection]  (relu5-east)    -- node {\midarrow} (linear4-west);
 
 \end{tikzpicture}
 \end{document}
